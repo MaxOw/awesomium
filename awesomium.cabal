@@ -1,7 +1,7 @@
 
 name:                awesomium
 version:             0.1.0.0
-synopsis:            High level Awesomium bindings.
+synopsis:            High-level Awesomium bindings.
 license:             LGPL-3
 license-file:        LICENSE
 author:              Maksymilian Owsianny
@@ -12,5 +12,6 @@ cabal-version:       >=1.8
 
 library
   exposed-modules:  Graphics.UI.Awesomium
-  build-depends:    base ==4.5.*, yaml, text
+                 ,  Graphics.UI.Awesomium.WebCore
+  build-depends:    base ==4.5.*, yaml, text, awesomium-raw
   hs-source-dirs:   src
