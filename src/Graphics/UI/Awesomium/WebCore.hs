@@ -1,5 +1,6 @@
 module Graphics.UI.Awesomium.WebCore
-    ( Config
+    ( Config (..)
+    , LogLevel (..)
     , defaultConfig
     , initialize
     , shutdown

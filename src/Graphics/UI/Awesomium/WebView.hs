@@ -1,7 +1,7 @@
 module Graphics.UI.Awesomium.WebView
-    ( destroy, loadUrl, loadHtml, loadFile, getUrl, goToHistoryOffset
-    , getHistoryBackCount, getHistoryForwardCount, stop, reload
-    , executeJavascript, executeJavascriptWithResult
+    ( WebView, destroy, loadUrl, loadHtml, loadFile, getUrl
+    , goToHistoryOffset, getHistoryBackCount, getHistoryForwardCount
+    , stop, reload, executeJavascript, executeJavascriptWithResult
     , callJavascriptFunction, createObject, destroyObject
     , setObjectProperty, setObjectCallback, isLoadingPage, isDirty
     , render, pauseRendering, resumeRendering, injectMouseMove
@@ -16,6 +16,7 @@ module Graphics.UI.Awesomium.WebView
     , login, cancelLogin, closeJavascriptDialog
 ) where
 
+import Prelude hiding (print)
 import Graphics.UI.Awesomium.Raw
 
 destroy :: WebView -> IO ()
