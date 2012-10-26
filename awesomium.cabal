@@ -5,7 +5,7 @@ synopsis:            High-level Awesomium bindings.
 license:             LGPL-3
 license-file:        LICENSE
 author:              Maksymilian Owsianny
-maintainer:          Maksymilian.Owsianny@gmail.com
+maintainer:          Maksymilian.Owsianny+Awesomium@gmail.com
 category:            Graphics
 build-type:          Simple
 cabal-version:       >=1.8
@@ -14,5 +14,6 @@ library
   exposed-modules:  Graphics.UI.Awesomium
                  ,  Graphics.UI.Awesomium.WebCore
                  ,  Graphics.UI.Awesomium.WebView
+                 ,  Graphics.UI.Awesomium.RenderBuffer
   build-depends:    base ==4.5.*, yaml, text, awesomium-raw
   hs-source-dirs:   src
