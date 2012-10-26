@@ -15,5 +15,6 @@ library
                  ,  Graphics.UI.Awesomium.WebCore
                  ,  Graphics.UI.Awesomium.WebView
                  ,  Graphics.UI.Awesomium.RenderBuffer
+                 ,  Graphics.UI.Awesomium.Resource
   build-depends:    base ==4.5.*, yaml, text, awesomium-raw
   hs-source-dirs:   src
