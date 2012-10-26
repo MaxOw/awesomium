@@ -16,5 +16,7 @@ library
                  ,  Graphics.UI.Awesomium.WebView
                  ,  Graphics.UI.Awesomium.RenderBuffer
                  ,  Graphics.UI.Awesomium.Resource
+                 ,  Graphics.UI.Awesomium.UploadElement
+                 ,  Graphics.UI.Awesomium.History
   build-depends:    base ==4.5.*, yaml, text, awesomium-raw
   hs-source-dirs:   src
