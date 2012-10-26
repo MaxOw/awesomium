@@ -15,13 +15,15 @@ module Graphics.UI.Awesomium.WebView
     , requestScrollData, find, stopFind, translatePage, activateIme
     , setImeComposition, confirmImeComposition, cancelImeComposition
     , login, cancelLogin, closeJavascriptDialog
-    , JSCallbackHandler, setJSCallback
+    
+    , module Graphics.UI.Awesomium.WebView.Callbacks
 ) where
 
 import Prelude hiding (print)
 import Foreign.Ptr (FunPtr)
 --import Control.Monad (Monad)
 import Graphics.UI.Awesomium.Raw
+import Graphics.UI.Awesomium.WebView.Callbacks
 
 destroy :: WebView -> IO ()
 destroy = awe_webview_destroy
@@ -212,28 +214,4 @@ cancelLogin = awe_webview_cancel_login
 
 closeJavascriptDialog :: WebView -> Int -> Bool -> String -> IO ()
 closeJavascriptDialog = awe_webview_close_javascript_dialog
-
-----------------------------------------------------------------------
--- Callbacks
-----------------------------------------------------------------------
-
-type JSCallbackHandler = String -> String -> JSArray -> IO ()
-defJSCallback :: JSCallbackHandler -> JSCallback
-defJSCallback convcb wv ao afn arr = do
-    o <- fromAweString ao
-    fn <- fromAweString afn
-    convcb o fn arr
-
-(>>=>) :: Monad m => m a -> (a -> m b) -> m a
-(>>=>) a f = a >>= \r -> f r >> return r
-
-(>>>=) :: Monad m => m a -> m b -> m a
-(>>>=) a f = a >>= \r -> f >> return r
-
--- | Creates API Handler for JS Callbacks. Returned FunPtr nedds to be
--- disposed with freeHaskellFunPtr when it's no longer needed
-setJSCallback :: WebView -> JSCallbackHandler -> IO (FunPtr JSCallback)
-setJSCallback wv ah =
-    mkJSCallback (defJSCallback ah) >>=>
-    awe_webview_set_callback_js_callback wv
 

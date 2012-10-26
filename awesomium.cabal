@@ -14,6 +14,7 @@ library
   exposed-modules:  Graphics.UI.Awesomium
                  ,  Graphics.UI.Awesomium.WebCore
                  ,  Graphics.UI.Awesomium.WebView
+                 ,  Graphics.UI.Awesomium.WebView.Callbacks
                  ,  Graphics.UI.Awesomium.RenderBuffer
                  ,  Graphics.UI.Awesomium.Resource
                  ,  Graphics.UI.Awesomium.UploadElement
