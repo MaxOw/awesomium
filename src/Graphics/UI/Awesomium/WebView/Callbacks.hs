@@ -18,8 +18,8 @@ module Graphics.UI.Awesomium.WebView.Callbacks
     , RequestFileChooserCallbackHandler, setCallbackRequestFileChooser
     , GetScrollDataCallbackHandler, setCallbackGetScrollData
     , JsConsoleMessageCallbackHandler, setCallbackJsConsoleMessage
---  , GetFindResultsCallbackHandler, setCallbackGetFindResults
---  , UpdateImeCallbackHandler, setCallbackUpdateIme
+    , GetFindResultsCallbackHandler, setCallbackGetFindResults
+    , UpdateImeCallbackHandler, setCallbackUpdateIme
     , ShowContextMenuCallbackHandler, setCallbackShowContextMenu
     , RequestLoginCallbackHandler, setCallbackRequestLogin
     , ChangeHistoryCallbackHandler, setCallbackChangeHistory
@@ -27,9 +27,13 @@ module Graphics.UI.Awesomium.WebView.Callbacks
     , ShowJavascriptDialogCallbackHandler, setCallbackShowJavascriptDialog
 ) where
 
+import Graphics.UI.Awesomium.Raw
+import Graphics.UI.Awesomium.Javascript
+
+import Foreign (peek)
 import Foreign.Ptr (FunPtr)
 import Foreign.Marshal.Utils (toBool)
-import Graphics.UI.Awesomium.Raw
+import Data.Yaml
 
 (>>=>) :: Monad m => m a -> (a -> m b) -> m a
 (>>=>) a f = a >>= \r -> f r >> return r
@@ -70,13 +74,12 @@ setCallbackFinishLoading wv ah =
     mkFinishLoadingCallback (defFinishLoadingCallback ah) >>=>
     awe_webview_set_callback_finish_loading wv
 
-type JSCallbackHandler = WebView -> String -> String -> JSArray -> IO()
+type JSCallbackHandler = WebView -> String -> String -> [Value] -> IO()
 defJSCallback :: JSCallbackHandler -> JSCallback
 defJSCallback convcb wv a1 a2 a0 = do
     ar1 <- fromAweString a1
     ar2 <- fromAweString a2
-    -- ar0 {JSArray ->  a0
-    let ar0 = a0
+    ar0 <- jsarrayToJSONValues a0
     convcb wv ar1 ar2 ar0
 
 setCallbackJS :: WebView -> JSCallbackHandler -> IO (FunPtr JSCallback)
@@ -107,10 +110,10 @@ setCallbackChangeTooltip wv ah =
     mkChangeTooltipCallback (defChangeTooltipCallback ah) >>=>
     awe_webview_set_callback_change_tooltip wv
 
-type ChangeCursorCallbackHandler = WebView -> Int -> IO()
+type ChangeCursorCallbackHandler = WebView -> CursorType -> IO()
 defChangeCursorCallback :: ChangeCursorCallbackHandler -> ChangeCursorCallback
 defChangeCursorCallback convcb wv a0 = do
-    let ar0 = fromEnum a0
+    let ar0 = toEnum . fromIntegral $ a0
     convcb wv ar0
 
 setCallbackChangeCursor :: WebView -> ChangeCursorCallbackHandler -> IO (FunPtr ChangeCursorCallback)
@@ -259,13 +262,12 @@ setCallbackJsConsoleMessage wv ah =
     mkJsConsoleMessageCallback (defJsConsoleMessageCallback ah) >>=>
     awe_webview_set_callback_js_console_message wv
 
-{- 
 type GetFindResultsCallbackHandler = WebView -> Int -> Int -> Rect -> Int -> Bool -> IO()
 defGetFindResultsCallback :: GetFindResultsCallbackHandler -> GetFindResultsCallback
 defGetFindResultsCallback convcb wv a1 a2 a3 a4 a0 = do
     let ar1 = fromIntegral a1
     let ar2 = fromIntegral a2
-    ar3 {Rect ->  a3
+    ar3 <- peek a3
     let ar4 = fromIntegral a4
     let ar0 = toBool a0
     convcb wv ar1 ar2 ar3 ar4 ar0
@@ -278,22 +280,21 @@ setCallbackGetFindResults wv ah =
 type UpdateImeCallbackHandler = WebView -> ImeState -> Rect -> IO()
 defUpdateImeCallback :: UpdateImeCallbackHandler -> UpdateImeCallback
 defUpdateImeCallback convcb wv a1 a0 = do
-    ar1 {ImeState ->  a1
-    ar0 {Rect ->  a0
+    let ar1 = toEnum . fromIntegral $ a1
+    ar0 <- peek a0
     convcb wv ar1 ar0
 
 setCallbackUpdateIme :: WebView -> UpdateImeCallbackHandler -> IO (FunPtr UpdateImeCallback)
 setCallbackUpdateIme wv ah = 
     mkUpdateImeCallback (defUpdateImeCallback ah) >>=>
     awe_webview_set_callback_update_ime wv
--}
 
-type ShowContextMenuCallbackHandler = WebView -> Int -> Int -> Int -> Int -> String -> String -> String -> String -> String -> Bool -> Int -> IO()
+type ShowContextMenuCallbackHandler = WebView -> Int -> Int -> MediaType -> Int {-MediaState-} -> String -> String -> String -> String -> String -> Bool -> Int {-CanEditFlags-} -> IO()
 defShowContextMenuCallback :: ShowContextMenuCallbackHandler -> ShowContextMenuCallback
 defShowContextMenuCallback convcb wv a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a0 = do
     let ar1 = fromIntegral a1
     let ar2 = fromIntegral a2
-    let ar3 = fromEnum a3
+    let ar3 = toEnum . fromIntegral $ a3
     let ar4 = fromIntegral a4
     ar5 <- fromAweString a5
     ar6 <- fromAweString a6
@@ -349,7 +350,7 @@ setCallbackFinishResize wv ah =
     mkFinishResizeCallback (defFinishResizeCallback ah) >>=>
     awe_webview_set_callback_finish_resize wv
 
-type ShowJavascriptDialogCallbackHandler = WebView -> Int -> Int -> String -> String -> String -> IO()
+type ShowJavascriptDialogCallbackHandler = WebView -> Int -> Int {-DialogFlags-} -> String -> String -> String -> IO()
 defShowJavascriptDialogCallback :: ShowJavascriptDialogCallbackHandler -> ShowJavascriptDialogCallback
 defShowJavascriptDialogCallback convcb wv a1 a2 a3 a4 a0 = do
     let ar1 = fromIntegral a1

@@ -1,7 +1,7 @@
 module Graphics.UI.Awesomium.Javascript
     ( JSValue, JSValueType(..), JSArray, JSObject
     , jsvalueToJSON
-    , jsarrayToJSON
+    , jsarrayToJSON , jsarrayToJSONValues
     , jsobjectToJSON
 ) where
 
@@ -27,10 +27,11 @@ jsvalueToJSON v = JSValue.getType v >>= \t -> case t of
     JSValueTypeArray   -> JSValue.getArray  v >>= jsarrayToJSON
 
 jsarrayToJSON :: JSArray -> IO Value
-jsarrayToJSON a = do
-    s <- JSArray.getSize a
-    ar <- mapM (jsvalueToJSON <=< JSArray.getElement a) [0..s-1]
-    return (array ar)
+jsarrayToJSON = return . array <=< jsarrayToJSONValues
+
+jsarrayToJSONValues :: JSArray -> IO [Value]
+jsarrayToJSONValues a = JSArray.getSize a >>= \s ->
+    mapM (jsvalueToJSON <=< JSArray.getElement a) [0..s-1]
 
 jsobjectToJSON :: JSObject -> IO Value
 jsobjectToJSON o = do

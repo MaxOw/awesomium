@@ -1,16 +1,18 @@
 module Graphics.UI.Awesomium.WebView
-    ( WebView, destroy, loadUrl, loadHtml, loadFile, getUrl
-    , goToHistoryOffset, getHistoryBackCount, getHistoryForwardCount
-    , stop, reload, executeJavascript, executeJavascriptWithResult
-    , callJavascriptFunction, createObject, destroyObject
-    , setObjectProperty, setObjectCallback, isLoadingPage, isDirty
+    ( WebView, Rect, WebkeyboardEvent, destroy, loadUrl, loadHtml
+    , loadFile, getUrl , goToHistoryOffset, getHistoryBackCount
+    , getHistoryForwardCount , stop, reload, executeJavascript
+    , executeJavascriptWithResult , callJavascriptFunction
+    , createObject, destroyObject , setObjectProperty
+    , setObjectCallback, isLoadingPage, isDirty , getDirtyBounds
     , render, pauseRendering, resumeRendering, MouseButton (..)
     , injectMouseMove, injectMouseDown, injectMouseUp
-    , injectMouseWheel, cut, copy, paste, selectAll, copyImageAt
-    , setZoom, resetZoom, getZoom, getZoomForHost, resize
-    , isResizing, unfocus, focus, setTransparent, isTransparent
-    , setUrlFilteringMode, addUrlFilter, clearAllUrlFilters
-    , addHeaderRewriteRule, removeHeaderRewriteRule
+    , injectMouseWheel, injectKeyboardEvent , cut, copy, paste
+    , selectAll, copyImageAt , setZoom, resetZoom, getZoom
+    , getZoomForHost, resize , isResizing, unfocus, focus
+    , setTransparent, isTransparent , setUrlFilteringMode
+    , addUrlFilter , clearAllUrlFilters , setHeaderDefinition
+    , addHeaderRewriteRule , removeHeaderRewriteRule
     , removeHeaderRewriteRulesByDefinitionName, chooseFile, print
     , requestScrollData, find, stopFind, translatePage, activateIme
     , setImeComposition, confirmImeComposition, cancelImeComposition
@@ -21,7 +23,6 @@ module Graphics.UI.Awesomium.WebView
 
 import Prelude hiding (print)
 import Foreign.Ptr (FunPtr)
---import Control.Monad (Monad)
 import Graphics.UI.Awesomium.Raw
 import Graphics.UI.Awesomium.WebView.Callbacks
 
@@ -82,7 +83,8 @@ isLoadingPage = awe_webview_is_loading_page
 isDirty :: WebView -> IO Bool
 isDirty = awe_webview_is_dirty
 
--- get_dirty_bounds = awe_webview_get_dirty_bounds :: WebView -> rect
+getDirtyBounds :: WebView -> IO Rect
+getDirtyBounds = awe_webview_get_dirty_bounds
 
 render :: WebView -> IO RenderBuffer
 render = awe_webview_render
@@ -105,7 +107,9 @@ injectMouseUp = awe_webview_inject_mouse_up
 injectMouseWheel :: WebView -> Int -> Int -> IO ()
 injectMouseWheel = awe_webview_inject_mouse_wheel
 
--- inject_keyboard_event = awe_webview_inject_keyboard_event :: WebView -> webkeyboardevent -> IO ()
+injectKeyboardEvent :: WebView -> WebkeyboardEvent -> IO ()
+injectKeyboardEvent = awe_webview_inject_keyboard_event
+
 -- #ifdef _WIN32
 -- inject_keyboard_event_win = awe_webview_inject_keyboard_event_win :: WebView', UINT msg, WPARAM wparam, LPARAM lparam } -> IO ()
 -- #endif
@@ -164,8 +168,8 @@ addUrlFilter = awe_webview_add_url_filter
 clearAllUrlFilters :: WebView -> IO ()
 clearAllUrlFilters = awe_webview_clear_all_url_filters
 
--- TODO: webview_set_header_definition :: WebView -> String -> [(String, String)] -> IO ()
--- set_header_definition = awe_webview_set_header_definition :: WebView -> String -> Int -> Ptr AweString -> Ptr AweString -> IO ()
+setHeaderDefinition :: WebView -> String -> [(String, String)] -> IO ()
+setHeaderDefinition = awe_webview_set_header_definition
 
 addHeaderRewriteRule :: WebView -> String -> String -> IO ()
 addHeaderRewriteRule = awe_webview_add_header_rewrite_rule
