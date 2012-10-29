@@ -1,8 +1,9 @@
 module Graphics.UI.Awesomium.Javascript
     ( JSValue, JSValueType(..), JSArray, JSObject
     , jsvalueToJSON
-    , jsarrayToJSON , jsarrayToJSONValues
+    , jsarrayToJSON, jsarrayToJSONValues
     , jsobjectToJSON
+    , withJS, withJSArray
 ) where
 
 import Graphics.UI.Awesomium.Raw
@@ -11,10 +12,15 @@ import qualified Graphics.UI.Awesomium.Javascript.JSValue as JSValue
 import qualified Graphics.UI.Awesomium.Javascript.JSArray as JSArray
 import qualified Graphics.UI.Awesomium.Javascript.JSObject as JSObject
 
+import Foreign.Marshal (withArray, withMany)
 import Control.Monad (mapM, (<=<))
-import qualified Data.Text as T
+import Control.Exception (bracket)
 import Data.Maybe (catMaybes)
-import Data.Yaml
+import qualified Data.Text as T
+import qualified Data.Vector as V
+import qualified Data.Map as M
+import Data.Aeson.Types
+import Data.Attoparsec.Number
 
 jsvalueToJSON :: JSValue -> IO Value
 jsvalueToJSON v = JSValue.getType v >>= \t -> case t of
@@ -27,7 +33,7 @@ jsvalueToJSON v = JSValue.getType v >>= \t -> case t of
     JSValueTypeArray   -> JSValue.getArray  v >>= jsarrayToJSON
 
 jsarrayToJSON :: JSArray -> IO Value
-jsarrayToJSON = return . array <=< jsarrayToJSONValues
+jsarrayToJSON = return . Array . V.fromList <=< jsarrayToJSONValues
 
 jsarrayToJSONValues :: JSArray -> IO [Value]
 jsarrayToJSONValues a = JSArray.getSize a >>= \s ->
@@ -49,6 +55,30 @@ jsobjectToJSON o = do
             if (t == JSValueTypeString)
                 then JSValue.toString v >>= return . Just
                 else return Nothing
+
+withJS :: Value -> (JSValue -> IO ()) -> IO ()
+withJS v f = case v of
+    Null           -> brt JSValue.createNullValue
+    (Bool _)       -> fv $ brt . JSValue.createBoolValue
+    (Number (I _)) -> fv $ brt . JSValue.createIntegerValue
+    (Number (D _)) -> fv $ brt . JSValue.createDoubleValue
+    (String _)     -> fv $ brt . JSValue.createStringValue
+    (Object _)     -> fv $ \ps ->
+        JSObject.with $ \ob ->
+            let (ns, vs) = (unzip . M.toList) ps in
+            withMany withJS vs $ \vs' ->
+                mapM_ (uncurry $ JSObject.setProperty ob) 
+                      (zip (map T.unpack ns) vs')
+                >> (brt $ JSValue.createObjectValue ob)
+    (Array _)      -> fv $ \vs ->
+        withMany withJS vs $ \vs' ->
+            JSArray.with vs' $ \ar ->
+                brt $ JSValue.createArrayValue ar
+    where brt c = JSValue.with c f
+          fv r = either putStrLn r $ parseEither parseJSON v
+
+withJSArray :: [Value] -> (JSArray -> IO ()) -> IO ()
+withJSArray vs f = withMany withJS vs $ flip JSArray.with f
 
 {-
 instance ToJSON JSValue where

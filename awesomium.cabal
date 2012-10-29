@@ -11,17 +11,21 @@ build-type:          Simple
 cabal-version:       >=1.8
 
 library
-  exposed-modules:  Graphics.UI.Awesomium
-                 ,  Graphics.UI.Awesomium.WebCore
-                 ,  Graphics.UI.Awesomium.WebView
-                 ,  Graphics.UI.Awesomium.WebView.Callbacks
-                 ,  Graphics.UI.Awesomium.RenderBuffer
-                 ,  Graphics.UI.Awesomium.Resource
-                 ,  Graphics.UI.Awesomium.UploadElement
-                 ,  Graphics.UI.Awesomium.History
-                 ,  Graphics.UI.Awesomium.Javascript
-                 ,  Graphics.UI.Awesomium.Javascript.JSValue
-                 ,  Graphics.UI.Awesomium.Javascript.JSObject
-                 ,  Graphics.UI.Awesomium.Javascript.JSArray
-  build-depends:    base ==4.5.*, yaml, text, awesomium-raw
-  hs-source-dirs:   src
+  exposed-modules: Graphics.UI.Awesomium
+                 , Graphics.UI.Awesomium.WebCore
+                 , Graphics.UI.Awesomium.WebView
+                 , Graphics.UI.Awesomium.WebView.Callbacks
+                 , Graphics.UI.Awesomium.RenderBuffer
+                 , Graphics.UI.Awesomium.Resource
+                 , Graphics.UI.Awesomium.UploadElement
+                 , Graphics.UI.Awesomium.History
+                 , Graphics.UI.Awesomium.Javascript
+                 , Graphics.UI.Awesomium.Javascript.JSValue
+                 , Graphics.UI.Awesomium.Javascript.JSObject
+                 , Graphics.UI.Awesomium.Javascript.JSArray
+
+  build-depends  : awesomium-raw
+                 , base ==4.5.*, vector, text, containers
+                 , aeson, attoparsec
+
+  hs-source-dirs : src

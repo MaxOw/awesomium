@@ -21,10 +21,13 @@ module Graphics.UI.Awesomium.WebView
     , module Graphics.UI.Awesomium.WebView.Callbacks
 ) where
 
+import Graphics.UI.Awesomium.Raw
+import Graphics.UI.Awesomium.Javascript
+import Graphics.UI.Awesomium.WebView.Callbacks
+
 import Prelude hiding (print)
 import Foreign.Ptr (FunPtr)
-import Graphics.UI.Awesomium.Raw
-import Graphics.UI.Awesomium.WebView.Callbacks
+import Data.Aeson
 
 destroy :: WebView -> IO ()
 destroy = awe_webview_destroy
@@ -59,11 +62,14 @@ reload = awe_webview_reload
 executeJavascript :: WebView -> String -> String -> IO ()
 executeJavascript = awe_webview_execute_javascript
 
-executeJavascriptWithResult :: WebView -> String -> String -> Int -> IO JSValue
-executeJavascriptWithResult = awe_webview_execute_javascript_with_result
+executeJavascriptWithResult :: WebView -> String -> String -> Int -> IO Value
+executeJavascriptWithResult wv o fn to = jsvalueToJSON =<<
+    awe_webview_execute_javascript_with_result wv o fn to
 
-callJavascriptFunction :: WebView -> String -> String -> JSArray -> String -> IO ()
-callJavascriptFunction = awe_webview_call_javascript_function
+callJavascriptFunction :: WebView -> String -> String -> [Value] -> String -> IO ()
+callJavascriptFunction wv o fn arg fr =
+    withJSArray arg $ \arg' -> do
+    awe_webview_call_javascript_function wv o fn arg' fr
 
 createObject :: WebView -> String -> IO ()
 createObject = awe_webview_create_object

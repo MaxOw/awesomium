@@ -2,6 +2,7 @@ module Graphics.UI.Awesomium.Javascript.JSObject
     ( JSObject
     , create
     , destroy
+    , with
     , hasProperty
     , getProperty
     , setProperty
@@ -11,11 +12,16 @@ module Graphics.UI.Awesomium.Javascript.JSObject
 
 import Graphics.UI.Awesomium.Raw
 
+import Control.Exception (bracket)
+
 create :: IO JSObject
 create = awe_jsobject_create
 
 destroy :: JSObject -> IO ()
 destroy = awe_jsobject_destroy
+
+with :: (JSObject -> IO b) -> IO b
+with = bracket create destroy
 
 hasProperty :: JSObject -> String -> IO Bool
 hasProperty = awe_jsobject_has_property

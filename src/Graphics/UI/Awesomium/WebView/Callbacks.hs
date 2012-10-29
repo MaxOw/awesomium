@@ -33,7 +33,7 @@ import Graphics.UI.Awesomium.Javascript
 import Foreign (peek)
 import Foreign.Ptr (FunPtr)
 import Foreign.Marshal.Utils (toBool)
-import Data.Yaml
+import Data.Aeson
 
 (>>=>) :: Monad m => m a -> (a -> m b) -> m a
 (>>=>) a f = a >>= \r -> f r >> return r

@@ -8,6 +8,7 @@ module Graphics.UI.Awesomium.Javascript.JSValue
     , createObjectValue
     , createArrayValue
     , destroy
+    , with
     , getType
     , toString
     , toInteger
@@ -17,8 +18,10 @@ module Graphics.UI.Awesomium.Javascript.JSValue
     , getObject
 ) where
 
-import Prelude (IO, Int, Double, Bool, String)
 import Graphics.UI.Awesomium.Raw
+
+import Prelude (IO, Int, Double, Bool, String)
+import Control.Exception (bracket)
 
 createNullValue :: IO JSValue
 createNullValue = awe_jsvalue_create_null_value
@@ -41,9 +44,11 @@ createObjectValue = awe_jsvalue_create_object_value
 createArrayValue :: JSArray -> IO JSValue
 createArrayValue = awe_jsvalue_create_array_value
 
-
 destroy :: JSValue -> IO ()
 destroy = awe_jsvalue_destroy
+
+with :: IO JSValue -> (JSValue -> IO b) -> IO b
+with c = bracket c destroy
 
 getType :: JSValue -> IO JSValueType
 getType = awe_jsvalue_get_type
