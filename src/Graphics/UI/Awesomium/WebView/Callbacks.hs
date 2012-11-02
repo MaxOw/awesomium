@@ -1,30 +1,30 @@
 module Graphics.UI.Awesomium.WebView.Callbacks
-    ( BeginNavigationCallbackHandler, setCallbackBeginNavigation
-    , BeginLoadingCallbackHandler, setCallbackBeginLoading
-    , FinishLoadingCallbackHandler, setCallbackFinishLoading
-    , JSCallbackHandler, setCallbackJS
-    , ReceiveTitleCallbackHandler, setCallbackReceiveTitle
-    , ChangeTooltipCallbackHandler, setCallbackChangeTooltip
-    , ChangeCursorCallbackHandler, setCallbackChangeCursor
-    , ChangeKeyboardFocusCallbackHandler, setCallbackChangeKeyboardFocus
-    , ChangeTargetUrlCallbackHandler, setCallbackChangeTargetUrl
-    , OpenExternalLinkCallbackHandler, setCallbackOpenExternalLink
-    , RequestDownloadCallbackHandler, setCallbackRequestDownload
-    , WebViewCrashedCallbackHandler, setCallbackWebViewCrashed
-    , PluginCrashedCallbackHandler, setCallbackPluginCrashed
-    , RequestMoveCallbackHandler, setCallbackRequestMove
-    , GetPageContentsCallbackHandler, setCallbackGetPageContents
-    , DomReadyCallbackHandler, setCallbackDomReady
-    , RequestFileChooserCallbackHandler, setCallbackRequestFileChooser
-    , GetScrollDataCallbackHandler, setCallbackGetScrollData
-    , JsConsoleMessageCallbackHandler, setCallbackJsConsoleMessage
-    , GetFindResultsCallbackHandler, setCallbackGetFindResults
-    , UpdateImeCallbackHandler, setCallbackUpdateIme
-    , ShowContextMenuCallbackHandler, setCallbackShowContextMenu
-    , RequestLoginCallbackHandler, setCallbackRequestLogin
-    , ChangeHistoryCallbackHandler, setCallbackChangeHistory
-    , FinishResizeCallbackHandler, setCallbackFinishResize
-    , ShowJavascriptDialogCallbackHandler, setCallbackShowJavascriptDialog
+    ( BeginNavigationCallbackHandler      , setCallbackBeginNavigation
+    , BeginLoadingCallbackHandler         , setCallbackBeginLoading
+    , FinishLoadingCallbackHandler        , setCallbackFinishLoading
+    , JSCallbackHandler                   , setCallbackJS
+    , ReceiveTitleCallbackHandler         , setCallbackReceiveTitle
+    , ChangeTooltipCallbackHandler        , setCallbackChangeTooltip
+    , ChangeCursorCallbackHandler         , setCallbackChangeCursor
+    , ChangeKeyboardFocusCallbackHandler  , setCallbackChangeKeyboardFocus
+    , ChangeTargetUrlCallbackHandler      , setCallbackChangeTargetUrl
+    , OpenExternalLinkCallbackHandler     , setCallbackOpenExternalLink
+    , RequestDownloadCallbackHandler      , setCallbackRequestDownload
+    , WebViewCrashedCallbackHandler       , setCallbackWebViewCrashed
+    , PluginCrashedCallbackHandler        , setCallbackPluginCrashed
+    , RequestMoveCallbackHandler          , setCallbackRequestMove
+    , GetPageContentsCallbackHandler      , setCallbackGetPageContents
+    , DomReadyCallbackHandler             , setCallbackDomReady
+    , RequestFileChooserCallbackHandler   , setCallbackRequestFileChooser
+    , GetScrollDataCallbackHandler        , setCallbackGetScrollData
+    , JsConsoleMessageCallbackHandler     , setCallbackJsConsoleMessage
+    , GetFindResultsCallbackHandler       , setCallbackGetFindResults
+    , UpdateImeCallbackHandler            , setCallbackUpdateIme
+    , ShowContextMenuCallbackHandler      , setCallbackShowContextMenu
+    , RequestLoginCallbackHandler         , setCallbackRequestLogin
+    , ChangeHistoryCallbackHandler        , setCallbackChangeHistory
+    , FinishResizeCallbackHandler         , setCallbackFinishResize
+    , ShowJavascriptDialogCallbackHandler , setCallbackShowJavascriptDialog
 ) where
 
 import Graphics.UI.Awesomium.Raw
