@@ -47,7 +47,13 @@ data Config = Config
     , customCss                :: String
 } deriving (Show, Read, Eq)
 
-
+-- | Helper function for easier initialization e.g.:
+--
+-- @
+--     initialize (defaultConfig { logLevel = Verbose
+--                               , customCss = myCss })
+-- @
+--
 defaultConfig :: Config
 defaultConfig = Config
     { enablePlugins            = False
@@ -74,7 +80,7 @@ defaultConfig = Config
     , disableWinMessagePump    = False
     , customCss                = "" }
 
--- Instantiates the WebCore singleton with a set of configuration
+-- | Instantiates the WebCore singleton with a set of configuration
 -- parameters.
 initialize :: Config -> IO ()
 initialize c@(Config a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12
@@ -182,7 +188,7 @@ setSuppressPrinterDialog = awe_webcore_set_suppress_printer_dialog
 
 -- | Query the on-disk history database.
 --
---      [@note@] You must enable /saveCacheAndCookies/ (see 'Config')
+--      [@note@] You must enable @saveCacheAndCookies@ (see 'Config')
 --  for this method to work (otherwise no results will be returned).
 queryHistory
     :: String -- ^ All results returned should match the
@@ -194,7 +200,7 @@ queryHistory
     -- limit.
     -> IO HistoryQueryResult -- ^ Returns an instance of
     -- historyQueryResult containing the results of the query. You
-    -- must call awe_history_query_result_destroy once you are
+    -- must call 'History.queryResultDestroy' once you are
     -- finished using the instance.
 queryHistory = awe_webcore_query_history
 
