@@ -8,15 +8,19 @@ module Graphics.UI.Awesomium.UploadElement
 
 import Graphics.UI.Awesomium.Raw
 
+-- | Whether or not this 'UploadElement' is a file.
 isFilePath :: UploadElement -> IO Bool
 isFilePath = awe_upload_element_is_file_path
 
+-- | Whether or not this 'UploadElement' is a string of bytes.
 isBytes :: UploadElement -> IO Bool
 isBytes = awe_upload_element_is_bytes
 
+-- | Get the string of bytes associated with this 'UploadElement'.
 getBytes :: UploadElement -> IO String
 getBytes = awe_upload_element_get_bytes
 
+-- | Get the file path associated with this 'UploadElement'.
 getFilePath :: UploadElement -> IO String
 getFilePath = awe_upload_element_get_file_path
 
