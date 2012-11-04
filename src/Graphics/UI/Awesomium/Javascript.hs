@@ -1,7 +1,19 @@
--- | You shouldn't ever have to use functions from this module or its
--- sub-modules as all functions that use Javascript already convert
+----------------------------------------------------------------------
+-- |
+-- Module      :  Graphics.UI.Awesomium.Javascript
+-- Copyright   :  (c) 2012 Maksymilian Owsianny
+-- License     :  LGPL-3 (see the file LICENSE)
+-- 
+-- Maintainer  :  Maksymilian.Owsianny+Awesomium@gmail.com
+-- Stability   :  Experimental
+-- Portability :  Portable? (needs FFI)
+--
+-- You shouldn't ever have to use functions from this module or its
+-- sub-modules, as all functions that use Javascript already convert
 -- everything to more friendly JSON 'Data.Aeson.Value' from
 -- "Data.Aeson" module.
+----------------------------------------------------------------------
+
 module Graphics.UI.Awesomium.Javascript
     ( JSValue, JSValueType(..), JSArray, JSObject
     , jsvalueToJSON

@@ -1,3 +1,15 @@
+----------------------------------------------------------------------
+-- |
+-- Module      :  Graphics.UI.Awesomium.WebCore
+-- Copyright   :  (c) 2012 Maksymilian Owsianny
+-- License     :  LGPL-3 (see the file LICENSE)
+-- 
+-- Maintainer  :  Maksymilian.Owsianny+Awesomium@gmail.com
+-- Stability   :  Experimental
+-- Portability :  Portable? (needs FFI)
+--
+----------------------------------------------------------------------
+
 module Graphics.UI.Awesomium.WebCore
     ( Config (..)
     , LogLevel (..)
@@ -98,8 +110,10 @@ shutdown = awe_webcore_shutdown
 setBaseDirectory
     :: String -- ^ The absolute path to your base directory.  The base
               -- directory is a location that holds all of your local
-              -- assets. It will be used for 'WebView.loadFile' and
-              -- 'WebView.loadHTML' (to resolve relative URLs).
+              -- assets. It will be used for
+              -- 'Graphics.UI.Awesomium.WebView.loadFile' and
+              -- 'Graphics.UI.Awesomium.WebView.loadHTML'
+              -- (to resolve relative URLs).
     -> IO ()
 setBaseDirectory = awe_webcore_set_base_directory
 
@@ -110,8 +124,8 @@ createWebview
     -> Bool       -- ^ Enable this to view the HTML source of any 
     -- loaded into this WebView. Default is false.
     -> IO WebView -- ^ Returns a pointer to the created WebView
-    -- instance. To call method on the WebView, see loadURL and
-    -- related functions.
+    -- instance. To call method on the WebView, see
+    -- 'Graphics.UI.Awesomium.WebView.loadURL' and related functions.
 createWebview = awe_webcore_create_webview
 
 -- | Sets a custom response page to use when a WebView encounters
@@ -155,7 +169,7 @@ clearCookies = awe_webcore_clear_cookies
 setCookie
     :: String -- ^ The URL to set the cookie on.
     -> String -- ^ The cookie string, for example: 
-    -- /"key1=value1; key2=value2"/
+    -- @\"key1=value1; key2=value2\"@
     -> Bool   -- ^ Whether or not this cookie is HTTP-only.
     -> Bool   -- ^ Whether or not to force this as a session cookie.
     -> IO ()
@@ -177,9 +191,10 @@ deleteCookie
 deleteCookie = awe_webcore_delete_cookie
 
 -- | Set whether or not the printer dialog should be suppressed or
--- not.  Set this to /True/ to hide printer dialogs and print
--- immediately using the OS's default printer when 'WebView.print' is
--- called.  Default is /False/ if you never call this.
+-- not.  Set this to @True@ to hide printer dialogs and print
+-- immediately using the OS's default printer when
+-- 'Graphics.UI.Awesomium.WebView.print' is
+-- called.  Default is @False@ if you never call this.
 setSuppressPrinterDialog
     :: Bool -- ^ Whether or not the printer dialog should be
     -- suppressed.

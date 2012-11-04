@@ -1,3 +1,15 @@
+----------------------------------------------------------------------
+-- |
+-- Module      :  Graphics.UI.Awesomium
+-- Copyright   :  (c) 2012 Maksymilian Owsianny
+-- License     :  LGPL-3 (see the file LICENSE)
+-- 
+-- Maintainer  :  Maksymilian.Owsianny+Awesomium@gmail.com
+-- Stability   :  Experimental
+-- Portability :  Portable? (needs FFI)
+--
+----------------------------------------------------------------------
+
 module Graphics.UI.Awesomium 
     ( module Graphics.UI.Awesomium.WebCore
     , module Graphics.UI.Awesomium.WebView

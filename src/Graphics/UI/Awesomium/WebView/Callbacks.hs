@@ -1,3 +1,15 @@
+----------------------------------------------------------------------
+-- |
+-- Module      :  Graphics.UI.Awesomium.WebView.Callbacks
+-- Copyright   :  (c) 2012 Maksymilian Owsianny
+-- License     :  LGPL-3 (see the file LICENSE)
+-- 
+-- Maintainer  :  Maksymilian.Owsianny+Awesomium@gmail.com
+-- Stability   :  Experimental
+-- Portability :  Portable? (needs FFI)
+--
+----------------------------------------------------------------------
+
 module Graphics.UI.Awesomium.WebView.Callbacks
     ( BeginNavigationCallbackHandler      , setCallbackBeginNavigation
     , BeginLoadingCallbackHandler         , setCallbackBeginLoading
@@ -175,8 +187,8 @@ defOpenExternalLinkCallback convcb wv a1 a0 = do
 -- | Assign a callback function to be notified when an external link
 -- is attempted to be opened. An external link is any link that
 -- normally opens in a new window in a standard browser (for example,
--- links with target="_blank", calls to window.open(url), and URL open
--- events from Flash plugins).
+-- links with @target=\"_blank\"@, calls to @window.open(url)@, and
+-- URL open events from Flash plugins).
 setCallbackOpenExternalLink :: WebView -> OpenExternalLinkCallbackHandler -> IO (FunPtr OpenExternalLinkCallback)
 setCallbackOpenExternalLink wv ah = 
     mkOpenExternalLinkCallback (defOpenExternalLinkCallback ah) >>=>
@@ -279,8 +291,8 @@ defRequestFileChooserCallback convcb wv a1 a2 a0 = do
 -- of an @input@ element with type @file@ being clicked by a user).
 -- You will need to display your own dialog (it does not have to be
 -- modal, this request does not block).  Once a file has been chosen
--- by the user, 'chooseFile' or
--- 'chooseMultipleFiles' should be called.
+-- by the user, 'Graphics.UI.Awesomium.WebView.chooseFile'
+-- should be called.
 setCallbackRequestFileChooser :: WebView -> RequestFileChooserCallbackHandler -> IO (FunPtr RequestFileChooserCallback)
 setCallbackRequestFileChooser wv ah = 
     mkRequestFileChooserCallback (defRequestFileChooserCallback ah) >>=>
@@ -297,7 +309,7 @@ defGetScrollDataCallback convcb wv a1 a2 a3 a4 a0 = do
     convcb wv ar1 ar2 ar3 ar4 ar0
 
 -- | Assign a callback function to be notified of a response to
--- 'requestScrollData'.
+-- 'Graphics.UI.Awesomium.WebView.requestScrollData'.
 setCallbackGetScrollData :: WebView -> GetScrollDataCallbackHandler -> IO (FunPtr GetScrollDataCallback)
 setCallbackGetScrollData wv ah = 
     mkGetScrollDataCallback (defGetScrollDataCallback ah) >>=>
@@ -330,7 +342,8 @@ defGetFindResultsCallback convcb wv a1 a2 a3 a4 a0 = do
     convcb wv ar1 ar2 ar3 ar4 ar0
 
 -- | Assign a callback function to be notified whenever we receive
--- results back from an in-page find operation ('find').
+-- results back from an in-page find operation
+-- ('Graphics.UI.Awesomium.WebView.find').
 setCallbackGetFindResults :: WebView -> GetFindResultsCallbackHandler -> IO (FunPtr GetFindResultsCallback)
 setCallbackGetFindResults wv ah = 
     mkGetFindResultsCallback (defGetFindResultsCallback ah) >>=>
@@ -346,7 +359,7 @@ defUpdateImeCallback convcb wv a1 a0 = do
 -- | Assign a callback function to be notified whenever the user does
 -- something that may change the position or visiblity of the IME
 -- Widget.  This callback is only active when IME is activated (please
--- see 'activateIme').
+-- see 'Graphics.UI.Awesomium.WebView.activateIme').
 setCallbackUpdateIme :: WebView -> UpdateImeCallbackHandler -> IO (FunPtr UpdateImeCallback)
 setCallbackUpdateIme wv ah = 
     mkUpdateImeCallback (defUpdateImeCallback ah) >>=>
@@ -390,7 +403,8 @@ defRequestLoginCallback convcb wv a1 a2 a3 a4 a5 a0 = do
 
 -- | Assign a callback function to be notified whenever a page
 -- requests authentication from the user (ex, Basic HTTP Auth, NTLM
--- Auth, etc.).  See 'login' and 'cancelLogin'.
+-- Auth, etc.).  See 'Graphics.UI.Awesomium.WebView.login' and
+-- 'Graphics.UI.Awesomium.WebView.cancelLogin'.
 setCallbackRequestLogin :: WebView -> RequestLoginCallbackHandler -> IO (FunPtr RequestLoginCallback)
 setCallbackRequestLogin wv ah = 
     mkRequestLoginCallback (defRequestLoginCallback ah) >>=>
@@ -438,7 +452,8 @@ defShowJavascriptDialogCallback convcb wv a1 a2 a3 a4 a0 = do
 
 -- | Assign a callback function to be notified whenever a WebView
 -- requests that a certain Javascript dialog be shown (eg, alert,
--- confirm, prompt). See 'closeJavascriptDialog' for more
+-- confirm, prompt). See
+-- 'Graphics.UI.Awesomium.WebView.closeJavascriptDialog' for more
 -- information.
 setCallbackShowJavascriptDialog :: WebView -> ShowJavascriptDialogCallbackHandler -> IO (FunPtr ShowJavascriptDialogCallback)
 setCallbackShowJavascriptDialog wv ah = 

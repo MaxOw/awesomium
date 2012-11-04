@@ -1,14 +1,26 @@
+----------------------------------------------------------------------
+-- |
+-- Module      :  Graphics.UI.Awesomium.WebView
+-- Copyright   :  (c) 2012 Maksymilian Owsianny
+-- License     :  LGPL-3 (see the file LICENSE)
+-- 
+-- Maintainer  :  Maksymilian.Owsianny+Awesomium@gmail.com
+-- Stability   :  Experimental
+-- Portability :  Portable? (needs FFI)
+--
+----------------------------------------------------------------------
+
 module Graphics.UI.Awesomium.WebView
-    ( WebView, Rect, WebkeyboardEvent, destroy, loadUrl, loadHtml
-    , loadFile, getUrl, goToHistoryOffset, getHistoryBackCount
-    , getHistoryForwardCount, stop, reload, executeJavascript
-    , executeJavascriptWithResult, callJavascriptFunction
-    , createObject, destroyObject, setObjectProperty
-    , setObjectCallback, isLoadingPage, isDirty, getDirtyBounds
-    , render, pauseRendering, resumeRendering, MouseButton (..)
-    , injectMouseMove, injectMouseDown, injectMouseUp
-    , injectMouseWheel, injectKeyboardEvent, cut, copy, paste
-    , selectAll, copyImageAt, setZoom, resetZoom, getZoom
+    ( WebView, Rect (..), WebkeyboardEvent (..), destroy, loadUrl
+    , loadHtml, loadFile, getUrl, goToHistoryOffset
+    , getHistoryBackCount , getHistoryForwardCount, stop, reload
+    , executeJavascript , executeJavascriptWithResult
+    , callJavascriptFunction , createObject, destroyObject
+    , setObjectProperty , setObjectCallback, isLoadingPage, isDirty
+    , getDirtyBounds , render, pauseRendering, resumeRendering
+    , MouseButton (..) , injectMouseMove, injectMouseDown
+    , injectMouseUp , injectMouseWheel, injectKeyboardEvent, cut, copy
+    , paste , selectAll, copyImageAt, setZoom, resetZoom, getZoom
     , getZoomForHost, resize, isResizing, unfocus, focus
     , setTransparent, isTransparent, UrlFilteringMode (..)
     , setUrlFilteringMode, addUrlFilter, clearAllUrlFilters
@@ -125,8 +137,8 @@ executeJavascriptWithResult
     -> Int -- ^ The maximum amount of time (in milliseconds) to wait
     -- for a result. Pass 0 to use no timeout. (If no result
     -- is obtained, or the timeout is reached, this function
-    -- will return a 'Value' with Null)
-    -> IO Value -- ^ Returns an 'Value'.
+    -- will return a 'Data.Aeson.Value' with Null)
+    -> IO Value -- ^ Returns an 'Data.Aeson.Value' (see "Data.Aeson").
 executeJavascriptWithResult wv o fn to = jsvalueToJSON =<<
     awe_webview_execute_javascript_with_result wv o fn to
 
@@ -137,7 +149,8 @@ callJavascriptFunction
     -- pass an empty string if the function is defined in
     -- the global scope.
     -> String -- ^ The name of the function.
-    -> [Value] -- ^ The arguments to pass to the function.
+    -> [Value] -- ^ The arguments to pass to the function (see
+    -- "Data.Aeson").
     -> String -- ^ The name of the frame to execute in;
     -- leave this blank to execute in the main frame.
     -> IO ()
@@ -226,7 +239,7 @@ render = awe_webview_render
 pauseRendering :: WebView -> IO ()
 pauseRendering = awe_webview_pause_rendering
 
--- | Resume rendering after all call to pause_rendering.
+-- | Resume rendering after all call to 'pauseRendering'.
 resumeRendering :: WebView -> IO ()
 resumeRendering = awe_webview_resume_rendering
 
@@ -359,7 +372,7 @@ focus = awe_webview_focus
 
 -- | Sets whether or not pages should be rendered with transparency
 -- preserved. (ex, for pages with
--- style=/"background-color:transparent"/)
+-- style=@\"background-color:transparent\"@)
 setTransparent
     :: WebView
     -> Bool -- ^ Whether or not this WebView is transparent.
@@ -369,7 +382,7 @@ setTransparent = awe_webview_set_transparent
 isTransparent :: WebView -> IO Bool
 isTransparent = awe_webview_is_transparent
 
--- | Sets the current URL Filtering Mode (default is UfmNone).
+-- | Sets the current URL Filtering Mode (default is @UfmNone@).
 -- See 'UrlFilteringMode' for more information on the modes.
 setUrlFilteringMode
     :: WebView
@@ -385,7 +398,7 @@ setUrlFilteringMode = awe_webview_set_url_filtering_mode
 --
 -- [@note2@] You may also use the @\"local:\/\/\"@ scheme prefix to
 -- describe the URL to the base directory (set via
--- 'WebCore.setBaseDirectory').
+-- 'Graphics.UI.Awesomium.WebCore.setBaseDirectory').
 --
 addUrlFilter
     :: WebView
@@ -456,7 +469,7 @@ chooseFile = awe_webview_choose_file
 
 -- | Print the current page. To suppress the printer selection dialog
 -- and print immediately using the operating system's defaults, see
--- 'WebCore.setSuppressPrinterDialog'.
+-- 'Graphics.UI.Awesomium.WebCore.setSuppressPrinterDialog'.
 print
     :: WebView
     -> IO ()
@@ -473,7 +486,7 @@ requestScrollData = awe_webview_request_scroll_data
 
 -- | Start finding a certain string on the current web-page. All
 -- matches of the string will be highlighted on the page and you can
--- jump to different instances of the string by using the /Find Next/
+-- jump to different instances of the string by using the @Find Next@
 -- parameter. To get actual stats about a certain query, please see
 -- 'setCallbackGetFindResults'.
 find
@@ -482,13 +495,13 @@ find
     -- need to generate one yourself for each unique
     -- search. Please note that you should use the
     -- same request id if you wish to iterate through
-    -- all the search results using the /Find Next/
+    -- all the search results using the @Find Next@
     -- parameter.
     -> String -- ^ The string to search for.
     -> Bool -- ^ Whether or not we should search forward, down
     -- the page.
     -> Bool -- ^ Whether or not this search is case-sensitive.
-    -> Bool -- ^ /Find Next/ - Whether or not we should jump to the
+    -> Bool -- ^ @Find Next@ - Whether or not we should jump to the
     -- next instance of a search string (you should use the same
     -- request id as a previously-successful search).
     -> IO ()
@@ -508,16 +521,16 @@ stopFind = awe_webview_stop_find
 translatePage
     :: WebView
     -> String -- ^ The language to translate from
-    -- (for ex. "en" for English)
+    -- (for ex. \"en\" for English)
     -> String -- ^ The language to translate to
-    -- (for ex. "fr" for French)
+    -- (for ex. \"fr\" for French)
     -> IO ()
 translatePage = awe_webview_translate_page
 
 -- | Call this method to let the WebView know you will be passing
 -- text input via IME and will need to be notified of any
 -- IME-related events (caret position, user unfocusing textbox, etc.)
--- Please see 'setCallbackUpdateIme
+-- Please see 'setCallbackUpdateIme'.
 activateIme
     :: WebView
     -> Bool
@@ -547,8 +560,8 @@ cancelImeComposition
     -> IO ()
 cancelImeComposition = awe_webview_cancel_ime_composition
 
--- | Respond to the "request login" callback with some user-supplied
--- credentials.
+-- | Respond to the @\"request login\"@ callback with some
+-- user-supplied credentials.
 login
     :: WebView
     -> Int -- ^ The unique ID of the request.
@@ -557,7 +570,7 @@ login
     -> IO ()
 login = awe_webview_login
 
--- | Respond to the "request login" callback by telling the
+-- | Respond to the @\"request login\"@ callback by telling the
 -- server that the user cancelled the authentication request.
 cancelLogin
     :: WebView
@@ -565,7 +578,7 @@ cancelLogin
     -> IO ()
 cancelLogin = awe_webview_cancel_login
 
--- | Respond to the "show javascript dialog" callback.
+-- | Respond to the @\"show javascript dialog\"@ callback.
 closeJavascriptDialog
     :: WebView
     -> Int -- ^ The unique ID of the dialog request.

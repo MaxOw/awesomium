@@ -1,3 +1,15 @@
+----------------------------------------------------------------------
+-- |
+-- Module      :  Graphics.UI.Awesomium.Resource
+-- Copyright   :  (c) 2012 Maksymilian Owsianny
+-- License     :  LGPL-3 (see the file LICENSE)
+-- 
+-- Maintainer  :  Maksymilian.Owsianny+Awesomium@gmail.com
+-- Stability   :  Experimental
+-- Portability :  Portable? (needs FFI)
+--
+----------------------------------------------------------------------
+
 module Graphics.UI.Awesomium.Resource
     ( ResourceResponse, ResourceRequest
  -- , responseCreate
@@ -38,7 +50,7 @@ requestCancel = awe_resource_request_cancel
 requestGetUrl :: ResourceRequest -> IO String
 requestGetUrl = awe_resource_request_get_url
 
--- | Get the HTTP method (usually "GET" or "POST").
+-- | Get the HTTP method (usually @GET@ or @POST@).
 requestGetMethod :: ResourceRequest -> IO String
 requestGetMethod = awe_resource_request_get_method
 
