@@ -5,6 +5,7 @@ module Graphics.UI.Awesomium.WebView.Callbacks
     , JSCallbackHandler                   , setCallbackJS
     , ReceiveTitleCallbackHandler         , setCallbackReceiveTitle
     , ChangeTooltipCallbackHandler        , setCallbackChangeTooltip
+    , CursorType (..)
     , ChangeCursorCallbackHandler         , setCallbackChangeCursor
     , ChangeKeyboardFocusCallbackHandler  , setCallbackChangeKeyboardFocus
     , ChangeTargetUrlCallbackHandler      , setCallbackChangeTargetUrl
@@ -19,7 +20,9 @@ module Graphics.UI.Awesomium.WebView.Callbacks
     , GetScrollDataCallbackHandler        , setCallbackGetScrollData
     , JsConsoleMessageCallbackHandler     , setCallbackJsConsoleMessage
     , GetFindResultsCallbackHandler       , setCallbackGetFindResults
+    , ImeState (..)
     , UpdateImeCallbackHandler            , setCallbackUpdateIme
+    , MediaType (..)
     , ShowContextMenuCallbackHandler      , setCallbackShowContextMenu
     , RequestLoginCallbackHandler         , setCallbackRequestLogin
     , ChangeHistoryCallbackHandler        , setCallbackChangeHistory
@@ -45,6 +48,8 @@ defBeginNavigationCallback convcb wv a1 a0 = do
     ar0 <- fromAweString a0
     convcb wv ar1 ar0
 
+-- | Assign a callback function to be notified when a WebView begins
+-- navigation to a certain URL.
 setCallbackBeginNavigation :: WebView -> BeginNavigationCallbackHandler -> IO (FunPtr BeginNavigationCallback)
 setCallbackBeginNavigation wv ah = 
     mkBeginNavigationCallback (defBeginNavigationCallback ah) >>=>
@@ -59,6 +64,8 @@ defBeginLoadingCallback convcb wv a1 a2 a3 a0 = do
     ar0 <- fromAweString a0
     convcb wv ar1 ar2 ar3 ar0
 
+-- | Assign a callback function to be notified when a WebView begins
+-- to actually receive data from a server.
 setCallbackBeginLoading :: WebView -> BeginLoadingCallbackHandler -> IO (FunPtr BeginLoadingCallback)
 setCallbackBeginLoading wv ah = 
     mkBeginLoadingCallback (defBeginLoadingCallback ah) >>=>
@@ -69,6 +76,8 @@ defFinishLoadingCallback :: FinishLoadingCallbackHandler -> FinishLoadingCallbac
 defFinishLoadingCallback convcb wv = do
     convcb wv
 
+-- | Assign a callback function to be notified when a WebView has
+-- finished all loads.
 setCallbackFinishLoading :: WebView -> FinishLoadingCallbackHandler -> IO (FunPtr FinishLoadingCallback)
 setCallbackFinishLoading wv ah = 
     mkFinishLoadingCallback (defFinishLoadingCallback ah) >>=>
@@ -82,6 +91,8 @@ defJSCallback convcb wv a1 a2 a0 = do
     ar0 <- jsarrayToJSONValues a0
     convcb wv ar1 ar2 ar0
 
+-- | Assign a callback function to be notified when a Javascript
+-- object callback has been invoked on a page.
 setCallbackJS :: WebView -> JSCallbackHandler -> IO (FunPtr JSCallback)
 setCallbackJS wv ah = 
     mkJSCallback (defJSCallback ah) >>=>
@@ -94,6 +105,8 @@ defReceiveTitleCallback convcb wv a1 a0 = do
     ar0 <- fromAweString a0
     convcb wv ar1 ar0
 
+-- | Assign a callback function to be notified when a page title is
+-- received.
 setCallbackReceiveTitle :: WebView -> ReceiveTitleCallbackHandler -> IO (FunPtr ReceiveTitleCallback)
 setCallbackReceiveTitle wv ah = 
     mkReceiveTitleCallback (defReceiveTitleCallback ah) >>=>
@@ -105,6 +118,8 @@ defChangeTooltipCallback convcb wv a0 = do
     ar0 <- fromAweString a0
     convcb wv ar0
 
+-- | Assign a callback function to be notified when a tooltip has
+-- changed state.
 setCallbackChangeTooltip :: WebView -> ChangeTooltipCallbackHandler -> IO (FunPtr ChangeTooltipCallback)
 setCallbackChangeTooltip wv ah = 
     mkChangeTooltipCallback (defChangeTooltipCallback ah) >>=>
@@ -116,6 +131,8 @@ defChangeCursorCallback convcb wv a0 = do
     let ar0 = toEnum . fromIntegral $ a0
     convcb wv ar0
 
+-- | Assign a callback function to be notified when a cursor has
+-- changed state.
 setCallbackChangeCursor :: WebView -> ChangeCursorCallbackHandler -> IO (FunPtr ChangeCursorCallback)
 setCallbackChangeCursor wv ah = 
     mkChangeCursorCallback (defChangeCursorCallback ah) >>=>
@@ -127,6 +144,8 @@ defChangeKeyboardFocusCallback convcb wv a0 = do
     let ar0 = toBool a0
     convcb wv ar0
 
+-- | Assign a callback function to be notified when keyboard focus has
+-- changed.
 setCallbackChangeKeyboardFocus :: WebView -> ChangeKeyboardFocusCallbackHandler -> IO (FunPtr ChangeKeyboardFocusCallback)
 setCallbackChangeKeyboardFocus wv ah = 
     mkChangeKeyboardFocusCallback (defChangeKeyboardFocusCallback ah) >>=>
@@ -138,6 +157,9 @@ defChangeTargetUrlCallback convcb wv a0 = do
     ar0 <- fromAweString a0
     convcb wv ar0
 
+-- | Assign a callback function to be notified when the target URL has
+-- changed.  This is usually the result of hovering over a link on the
+-- page.
 setCallbackChangeTargetUrl :: WebView -> ChangeTargetUrlCallbackHandler -> IO (FunPtr ChangeTargetUrlCallback)
 setCallbackChangeTargetUrl wv ah = 
     mkChangeTargetUrlCallback (defChangeTargetUrlCallback ah) >>=>
@@ -150,6 +172,11 @@ defOpenExternalLinkCallback convcb wv a1 a0 = do
     ar0 <- fromAweString a0
     convcb wv ar1 ar0
 
+-- | Assign a callback function to be notified when an external link
+-- is attempted to be opened. An external link is any link that
+-- normally opens in a new window in a standard browser (for example,
+-- links with target="_blank", calls to window.open(url), and URL open
+-- events from Flash plugins).
 setCallbackOpenExternalLink :: WebView -> OpenExternalLinkCallbackHandler -> IO (FunPtr OpenExternalLinkCallback)
 setCallbackOpenExternalLink wv ah = 
     mkOpenExternalLinkCallback (defOpenExternalLinkCallback ah) >>=>
@@ -161,6 +188,8 @@ defRequestDownloadCallback convcb wv a0 = do
     ar0 <- fromAweString a0
     convcb wv ar0
 
+-- | Assign a callback function to be notified when a page requests
+-- for a certain URL to be downloaded by the user.
 setCallbackRequestDownload :: WebView -> RequestDownloadCallbackHandler -> IO (FunPtr RequestDownloadCallback)
 setCallbackRequestDownload wv ah = 
     mkRequestDownloadCallback (defRequestDownloadCallback ah) >>=>
@@ -171,6 +200,9 @@ defWebViewCrashedCallback :: WebViewCrashedCallbackHandler -> WebViewCrashedCall
 defWebViewCrashedCallback convcb wv = do
     convcb wv
 
+-- | Assign a callback function to be notified when the renderer for
+-- a certain WebView (which is isolated in a separate process) crashes
+-- unexpectedly.
 setCallbackWebViewCrashed :: WebView -> WebViewCrashedCallbackHandler -> IO (FunPtr WebViewCrashedCallback)
 setCallbackWebViewCrashed wv ah = 
     mkWebViewCrashedCallback (defWebViewCrashedCallback ah) >>=>
@@ -182,6 +214,9 @@ defPluginCrashedCallback convcb wv a0 = do
     ar0 <- fromAweString a0
     convcb wv ar0
 
+-- | Assign a callback function to be notified when when the renderer
+-- for a certain plugin (usually Flash, which is isolated in
+-- a separate process) crashes unexpectedly.
 setCallbackPluginCrashed :: WebView -> PluginCrashedCallbackHandler -> IO (FunPtr PluginCrashedCallback)
 setCallbackPluginCrashed wv ah = 
     mkPluginCrashedCallback (defPluginCrashedCallback ah) >>=>
@@ -194,6 +229,9 @@ defRequestMoveCallback convcb wv a1 a0 = do
     let ar0 = fromIntegral a0
     convcb wv ar1 ar0
 
+-- | Assign a callback function to be notified when the page requests
+-- for the containing window to be moved to a certain location on the
+-- screen.
 setCallbackRequestMove :: WebView -> RequestMoveCallbackHandler -> IO (FunPtr RequestMoveCallback)
 setCallbackRequestMove wv ah = 
     mkRequestMoveCallback (defRequestMoveCallback ah) >>=>
@@ -206,6 +244,9 @@ defGetPageContentsCallback convcb wv a1 a0 = do
     ar0 <- fromAweString a0
     convcb wv ar1 ar0
 
+-- | Assign a callback function to be notified when the contents of
+-- the page has finished loading. This occurs at the end of most page
+-- loads.
 setCallbackGetPageContents :: WebView -> GetPageContentsCallbackHandler -> IO (FunPtr GetPageContentsCallback)
 setCallbackGetPageContents wv ah = 
     mkGetPageContentsCallback (defGetPageContentsCallback ah) >>=>
@@ -216,6 +257,10 @@ defDomReadyCallback :: DomReadyCallbackHandler -> DomReadyCallback
 defDomReadyCallback convcb wv = do
     convcb wv
 
+-- | Assign a callback function to be notified once the DOM (Document
+-- Object Model) for a page is ready. This is very useful for
+-- executing Javascript on a page before its content has finished
+-- loading.
 setCallbackDomReady :: WebView -> DomReadyCallbackHandler -> IO (FunPtr DomReadyCallback)
 setCallbackDomReady wv ah = 
     mkDomReadyCallback (defDomReadyCallback ah) >>=>
@@ -229,6 +274,13 @@ defRequestFileChooserCallback convcb wv a1 a2 a0 = do
     ar0 <- fromAweString a0
     convcb wv ar1 ar2 ar0
 
+-- | Assign a callback function to be notified whenever a page
+-- requests a file chooser dialog to be displayed (usually the result
+-- of an @input@ element with type @file@ being clicked by a user).
+-- You will need to display your own dialog (it does not have to be
+-- modal, this request does not block).  Once a file has been chosen
+-- by the user, 'chooseFile' or
+-- 'chooseMultipleFiles' should be called.
 setCallbackRequestFileChooser :: WebView -> RequestFileChooserCallbackHandler -> IO (FunPtr RequestFileChooserCallback)
 setCallbackRequestFileChooser wv ah = 
     mkRequestFileChooserCallback (defRequestFileChooserCallback ah) >>=>
@@ -244,6 +296,8 @@ defGetScrollDataCallback convcb wv a1 a2 a3 a4 a0 = do
     let ar0 = fromIntegral a0
     convcb wv ar1 ar2 ar3 ar4 ar0
 
+-- | Assign a callback function to be notified of a response to
+-- 'requestScrollData'.
 setCallbackGetScrollData :: WebView -> GetScrollDataCallbackHandler -> IO (FunPtr GetScrollDataCallback)
 setCallbackGetScrollData wv ah = 
     mkGetScrollDataCallback (defGetScrollDataCallback ah) >>=>
@@ -257,6 +311,9 @@ defJsConsoleMessageCallback convcb wv a1 a2 a0 = do
     ar0 <- fromAweString a0
     convcb wv ar1 ar2 ar0
 
+-- | Assign a callback function to be notified of any Javascript
+-- console messages. (Usually Javascript errors encountered in
+-- scripts)
 setCallbackJsConsoleMessage :: WebView -> JsConsoleMessageCallbackHandler -> IO (FunPtr JsConsoleMessageCallback)
 setCallbackJsConsoleMessage wv ah = 
     mkJsConsoleMessageCallback (defJsConsoleMessageCallback ah) >>=>
@@ -272,6 +329,8 @@ defGetFindResultsCallback convcb wv a1 a2 a3 a4 a0 = do
     let ar0 = toBool a0
     convcb wv ar1 ar2 ar3 ar4 ar0
 
+-- | Assign a callback function to be notified whenever we receive
+-- results back from an in-page find operation ('find').
 setCallbackGetFindResults :: WebView -> GetFindResultsCallbackHandler -> IO (FunPtr GetFindResultsCallback)
 setCallbackGetFindResults wv ah = 
     mkGetFindResultsCallback (defGetFindResultsCallback ah) >>=>
@@ -284,6 +343,10 @@ defUpdateImeCallback convcb wv a1 a0 = do
     ar0 <- peek a0
     convcb wv ar1 ar0
 
+-- | Assign a callback function to be notified whenever the user does
+-- something that may change the position or visiblity of the IME
+-- Widget.  This callback is only active when IME is activated (please
+-- see 'activateIme').
 setCallbackUpdateIme :: WebView -> UpdateImeCallbackHandler -> IO (FunPtr UpdateImeCallback)
 setCallbackUpdateIme wv ah = 
     mkUpdateImeCallback (defUpdateImeCallback ah) >>=>
@@ -305,6 +368,10 @@ defShowContextMenuCallback convcb wv a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a0 = do
     let ar0 = fromIntegral a0
     convcb wv ar1 ar2 ar3 ar4 ar5 ar6 ar7 ar8 ar9 ar10 ar0
 
+-- | Assign a callback function to be notified whenever the page
+-- requests a context menu to be shown (usually the result of a user
+-- right-clicking somewhere on the page). It is your responsiblity to
+-- display a menu for the user to select an appropriate action.
 setCallbackShowContextMenu :: WebView -> ShowContextMenuCallbackHandler -> IO (FunPtr ShowContextMenuCallback)
 setCallbackShowContextMenu wv ah = 
     mkShowContextMenuCallback (defShowContextMenuCallback ah) >>=>
@@ -321,6 +388,9 @@ defRequestLoginCallback convcb wv a1 a2 a3 a4 a5 a0 = do
     ar0 <- fromAweString a0
     convcb wv ar1 ar2 ar3 ar4 ar5 ar0
 
+-- | Assign a callback function to be notified whenever a page
+-- requests authentication from the user (ex, Basic HTTP Auth, NTLM
+-- Auth, etc.).  See 'login' and 'cancelLogin'.
 setCallbackRequestLogin :: WebView -> RequestLoginCallbackHandler -> IO (FunPtr RequestLoginCallback)
 setCallbackRequestLogin wv ah = 
     mkRequestLoginCallback (defRequestLoginCallback ah) >>=>
@@ -333,6 +403,9 @@ defChangeHistoryCallback convcb wv a1 a0 = do
     let ar0 = fromIntegral a0
     convcb wv ar1 ar0
 
+-- | Assign a callback function to be notified whenever the history
+-- state has changed. (eg, the state of thie back/forward buttons
+-- should be updated)
 setCallbackChangeHistory :: WebView -> ChangeHistoryCallbackHandler -> IO (FunPtr ChangeHistoryCallback)
 setCallbackChangeHistory wv ah = 
     mkChangeHistoryCallback (defChangeHistoryCallback ah) >>=>
@@ -345,6 +418,9 @@ defFinishResizeCallback convcb wv a1 a0 = do
     let ar0 = fromIntegral a0
     convcb wv ar1 ar0
 
+-- | Assign a callback function to be notified whenever a WebView has
+-- finished resizing to a certain size (and has finished repainting
+-- the RenderBuffer).
 setCallbackFinishResize :: WebView -> FinishResizeCallbackHandler -> IO (FunPtr FinishResizeCallback)
 setCallbackFinishResize wv ah = 
     mkFinishResizeCallback (defFinishResizeCallback ah) >>=>
@@ -360,6 +436,10 @@ defShowJavascriptDialogCallback convcb wv a1 a2 a3 a4 a0 = do
     ar0 <- fromAweString a0
     convcb wv ar1 ar2 ar3 ar4 ar0
 
+-- | Assign a callback function to be notified whenever a WebView
+-- requests that a certain Javascript dialog be shown (eg, alert,
+-- confirm, prompt). See 'closeJavascriptDialog' for more
+-- information.
 setCallbackShowJavascriptDialog :: WebView -> ShowJavascriptDialogCallbackHandler -> IO (FunPtr ShowJavascriptDialogCallback)
 setCallbackShowJavascriptDialog wv ah = 
     mkShowJavascriptDialogCallback (defShowJavascriptDialogCallback ah) >>=>
