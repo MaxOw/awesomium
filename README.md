@@ -6,6 +6,7 @@ for Haskell.
 You will need [awesomium-raw](https://github.com/MaxOw/awesomium-raw)
 library to use this.
 
+For usage example go [here](https://github.com/MaxOw/awesomium-example)
+
 ## TODO ##
-    * Examples
     * Documentation of callbacks
